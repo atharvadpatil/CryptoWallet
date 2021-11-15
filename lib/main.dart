@@ -1,11 +1,17 @@
+import 'package:cryptowallet/net/flutterfire.dart';
 import 'package:flutter/material.dart';
-import 'pages/SignIn.dart';
+import 'pages/authentication.dart';
 import 'pages/CoinList.dart';
 import 'pages/WatchList.dart';
 import 'pages/Wallet.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 
-void main() => runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -17,10 +23,10 @@ class MyApp extends StatelessWidget {
 
         primarySwatch: Colors.blue,
       ),
-      home: SignIn(),
+      home: Authentication(),
       routes: {
         '/home': (context)=>MyStatefulWidget(),
-        '/signin':(context)=>SignIn(),
+        '/Authentication':(context)=>Authentication(),
 
       },
     );
@@ -103,7 +109,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                   leading: Icon(Icons.login, color: Colors.black),
                   title: Text("Logout"),
                   onTap: () {
-                    Navigator.pushReplacementNamed(context, '/signin');
+                    Navigator.pushReplacementNamed(context, '/Authentication');
                   }),
             ],
           )),
