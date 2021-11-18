@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'CoinList.dart';
 import 'package:cryptowallet/net/flutterfire.dart';
+import '/main.dart';
 class Authentication extends StatefulWidget {
   Authentication({Key? key}) : super(key: key);
 
@@ -78,7 +79,7 @@ class _AuthenticationState extends State<Authentication> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => CoinList(),
+                        builder: (context) => MyStatefulWidget(),
                       ),
                     );
                   }
@@ -102,7 +103,7 @@ class _AuthenticationState extends State<Authentication> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CoinList(),
+                          builder: (context) => MyStatefulWidget(),
                         ),
                       );
                     }

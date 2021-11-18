@@ -108,7 +108,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
               ListTile(
                   leading: Icon(Icons.login, color: Colors.black),
                   title: Text("Logout"),
-                  onTap: () {
+                  onTap: () async {
+                    await signOut();
                     Navigator.pushReplacementNamed(context, '/Authentication');
                   }),
             ],

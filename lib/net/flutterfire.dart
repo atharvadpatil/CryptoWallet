@@ -30,3 +30,17 @@ Future<bool> register(String email, String password) async {
   }
 }
 
+Future<void> signOut() async
+{
+  try{
+
+    await FirebaseAuth.instance.signOut();
+
+  }
+  catch(e)
+  {
+    print(e.toString());
+  }
+}
+
+
