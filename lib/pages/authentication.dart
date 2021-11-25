@@ -18,6 +18,10 @@ class _AuthenticationState extends State<Authentication> {
 
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('CryptoWallet'),
+        centerTitle: true,
+      ),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
@@ -33,9 +37,9 @@ class _AuthenticationState extends State<Authentication> {
                 style: TextStyle(color: Colors.white),
                 controller: _emailField,
                 decoration: InputDecoration(
-                  hintText: "something@email.com",
+                  hintText: "Enter Email",
                   hintStyle: TextStyle(
-                    color: Colors.white,
+                    color: Colors.white38,
                   ),
                   labelText: "Email",
                   labelStyle: TextStyle(
@@ -54,7 +58,7 @@ class _AuthenticationState extends State<Authentication> {
                 decoration: InputDecoration(
                   hintText: "password",
                   hintStyle: TextStyle(
-                    color: Colors.white,
+                    color: Colors.white38,
                   ),
                   labelText: "Password",
                   labelStyle: TextStyle(
