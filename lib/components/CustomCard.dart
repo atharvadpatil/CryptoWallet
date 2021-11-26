@@ -1,5 +1,8 @@
+import 'package:cryptowallet/net/flutterfire.dart';
 import 'package:flutter/material.dart';
 import '../pages/CoinDetails.dart';
+import '../globals.dart' as globals;
+
 
 class CustomCard extends StatefulWidget {
   dynamic id = null;
@@ -54,8 +57,13 @@ class _CustomCardState extends State<CustomCard> {
                 price_change_percentage_24h: widget.price_change_percentage_24h,
               )));
         },
-        onLongPress: (){
-          print(widget.name);
+        onLongPress: () async {
+          if(globals.selectedIndex==0) {
+            await addToWatchList(widget.id, context);
+          }
+          if(globals.selectedIndex==1){
+            await removeFromWatchList(widget.id, context);
+          }
         },
         child: Column(
           children: <Widget>[
