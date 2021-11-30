@@ -1,4 +1,8 @@
+import 'package:cryptowallet/main.dart';
+import 'package:cryptowallet/net/flutterfire.dart';
+import 'package:cryptowallet/pages/WatchList.dart';
 import 'package:flutter/material.dart';
+import '../globals.dart' as globals;
 
 class CoinDetails extends StatefulWidget {
   dynamic id = null;
@@ -37,7 +41,7 @@ class _CoinDetailsState extends State<CoinDetails> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('Add TO Wallet'),
+            title: Text('Add To Wallet'),
             content: TextField(
               onChanged: (value) {
                 setState(() {
@@ -53,6 +57,7 @@ class _CoinDetailsState extends State<CoinDetails> {
                 textColor: Colors.white,
                 child: Text('CANCEL'),
                 onPressed: () {
+                  _textFieldController.clear();
                   setState(() {
                     Navigator.pop(context);
                   });
@@ -62,15 +67,19 @@ class _CoinDetailsState extends State<CoinDetails> {
                 color: Colors.green,
                 textColor: Colors.white,
                 child: Text('ADD'),
-                onPressed: () {
+                onPressed: () async{
                   setState(() {
                     codeDialog = valueText;
-                    setState(() {
-                      valueText = "";
-                    });
+                    _textFieldController.clear();
                     Navigator.pop(context);
-                    print(codeDialog);
                   });
+                  bool added = await addCoin(widget.id, codeDialog);
+                  if(added){
+                    globals.selectedIndex=2;
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MyStatefulWidget()));
+                  }
                 },
               ),
             ],
@@ -82,226 +91,234 @@ class _CoinDetailsState extends State<CoinDetails> {
   String valueText="";
   @override
   Widget build(BuildContext context) {
+    Color pcolor = widget.price_change_percentage_24h>0 ? Colors.green : Colors.red;
+    Color ccolor = widget.price_change_24h>0 ? Colors.green : Colors.red;
     return Scaffold(
       appBar: AppBar(
         title: Text('CryptoWallet'),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(30.0, 40.0, 30.0, 0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Center(
-              child: CircleAvatar(
-                radius: 60.0,
-                backgroundImage: NetworkImage('https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579'),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(30.0, 40.0, 30.0, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Center(
+                child: CircleAvatar(
+                  radius: 60.0,
+                  backgroundImage: NetworkImage(widget.image),
+                ),
               ),
-            ),
-            SizedBox(height: 40.0),
-            Row(
-              children: <Widget>[
-                Text(
-                  'Symbol:',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    letterSpacing: 2.0,
-                    fontWeight: FontWeight.bold,
+              SizedBox(height: 40.0),
+              Row(
+                children: <Widget>[
+                  Text(
+                    'Symbol:',
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      letterSpacing: 2.0,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                SizedBox(width: 10.0),
-                Text(
-                  'btc',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    letterSpacing: 1.0,
-                  ),
-                )
-              ],
-            ),
-            SizedBox(height: 20.0),
-            Row(
-              children: <Widget>[
-                Text(
-                  'Name:',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    letterSpacing: 2.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(width: 10.0),
-                Text(
-                  'Bitcoin',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    letterSpacing: 1.0,
-                  ),
-                )
-              ],
-            ),
-            SizedBox(height: 20.0),
-            Row(
-              children: <Widget>[
-                Text(
-                  'Current Price:',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    letterSpacing: 2.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(width: 10.0),
-                Text(
-                  '4000000',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    letterSpacing: 1.0,
-                  ),
-                )
-              ],
-            ),
-            SizedBox(height: 20.0),
-            Row(
-              children: <Widget>[
-                Text(
-                  'Market Cap:',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    letterSpacing: 2.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(width: 10.0),
-                Text(
-                  '200000000',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    letterSpacing: 1.0,
-                  ),
-                )
-              ],
-            ),
-            SizedBox(height: 20.0),
-            Row(
-              children: <Widget>[
-                Text(
-                  'Market Cap Rank:',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    letterSpacing: 2.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(width: 10.0),
-                Text(
-                  '1',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    letterSpacing: 1.0,
-                  ),
-                )
-              ],
-            ),
-            SizedBox(height: 20.0),
-            Row(
-              children: <Widget>[
-                Text(
-                  '24h High:',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    letterSpacing: 2.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(width: 10.0),
-                Text(
-                  '4100000',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    letterSpacing: 1.0,
-                  ),
-                )
-              ],
-            ),
-            SizedBox(height: 20.0),
-            Row(
-              children: <Widget>[
-                Text(
-                  '24h Low:',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    letterSpacing: 2.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(width: 10.0),
-                Text(
-                  '3900000',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    letterSpacing: 1.0,
-                  ),
-                )
-              ],
-            ),
-            SizedBox(height: 20.0),
-            Row(
-              children: <Widget>[
-                Text(
-                  'Price Change in 24h:',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    letterSpacing: 2.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(width: 10.0),
-                Text(
-                  '100000',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    letterSpacing: 1.0,
-                  ),
-                )
-              ],
-            ),
-            SizedBox(height: 20.0),
-            Row(
-              children: <Widget>[
-                Text(
-                  '% Price change in 24h:',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    letterSpacing: 2.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(width: 10.0),
-                Text(
-                  '1%',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    letterSpacing: 1.0,
-                  ),
-                )
-              ],
-            ),
-            SizedBox(height: 40.0),
-            Center(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: new RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(30.0),
-                  ),
-                ),
-                onPressed: () {
-                  _displayTextInputDialog(context);
-                },
-                child: Text("Add To Wallet".toUpperCase(), style: TextStyle(fontSize: 14)),
+                  SizedBox(width: 10.0),
+                  Text(
+                    widget.symbol,
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      letterSpacing: 1.0,
+                    ),
+                  )
+                ],
               ),
-            ),
-          ],
+              SizedBox(height: 20.0),
+              Row(
+                children: <Widget>[
+                  Text(
+                    'Name:',
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      letterSpacing: 2.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(width: 10.0),
+                  Text(
+                    widget.name,
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      letterSpacing: 1.0,
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(height: 20.0),
+              Row(
+                children: <Widget>[
+                  Text(
+                    'Current Price:',
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      letterSpacing: 2.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(width: 10.0),
+                  Text(
+                    '₹'+widget.current_price.toString(),
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      letterSpacing: 1.0,
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(height: 20.0),
+              Row(
+                children: <Widget>[
+                  Text(
+                    'Market Cap:',
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      letterSpacing: 2.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(width: 10.0),
+                  Text(
+                    '₹'+widget.market_cap.toString(),
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      letterSpacing: 1.0,
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(height: 20.0),
+              Row(
+                children: <Widget>[
+                  Text(
+                    'Market Cap Rank:',
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      letterSpacing: 2.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(width: 10.0),
+                  Text(
+                    widget.market_cap_rank.toString(),
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      letterSpacing: 1.0,
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(height: 20.0),
+              Row(
+                children: <Widget>[
+                  Text(
+                    '24h High:',
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      letterSpacing: 2.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(width: 10.0),
+                  Text(
+                    '₹'+widget.high_24h.toString(),
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      letterSpacing: 1.0,
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(height: 20.0),
+              Row(
+                children: <Widget>[
+                  Text(
+                    '24h Low:',
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      letterSpacing: 2.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(width: 10.0),
+                  Text(
+                    '₹'+widget.low_24h.toString(),
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      letterSpacing: 1.0,
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(height: 20.0),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'Price Change in 24h:',
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      letterSpacing: 2.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 10.0),
+                  Text(
+                    '₹'+widget.price_change_24h.toString(),
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      letterSpacing: 1.0,
+                      color: ccolor,
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(height: 20.0),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'Percent Price change in 24h:',
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      letterSpacing: 2.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 10.0),
+                  Text(
+                    widget.price_change_percentage_24h.toString()+"%",
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      letterSpacing: 1.0,
+                      color: pcolor,
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(height: 40.0),
+              Center(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: new RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(30.0),
+                    ),
+                  ),
+                  onPressed: () {
+                    _displayTextInputDialog(context);
+                  },
+                  child: Text("Add To Wallet".toUpperCase(), style: TextStyle(fontSize: 14)),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
