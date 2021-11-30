@@ -33,6 +33,17 @@ class _AuthenticationState extends State<Authentication> {
           children: [
             Container(
               width: MediaQuery.of(context).size.width / 1.3,
+              child: Text(
+                'Login/Register',
+                style: TextStyle(
+                  color: Colors.white,
+                    fontSize: 24,
+                ),
+              ),
+            ),
+            SizedBox(height: MediaQuery.of(context).size.height / 15),
+            Container(
+              width: MediaQuery.of(context).size.width / 1.3,
               child: TextFormField(
                 style: TextStyle(color: Colors.white),
                 controller: _emailField,
@@ -77,15 +88,36 @@ class _AuthenticationState extends State<Authentication> {
               ),
               child: MaterialButton(
                 onPressed: () async {
-                  bool shouldNavigate =
+                  int shouldNavigate =
                       await register(_emailField.text, _passwordField.text);
-                  if (shouldNavigate) {
+                  if (shouldNavigate==0) {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => MyStatefulWidget(),
                       ),
                     );
+                  }
+                  else{
+                    var text="";
+                    if(shouldNavigate==1){
+                      text = "The password provided is too weak";
+                    }
+                    else if(shouldNavigate==2){
+                      text = "The account already exists for that email";
+                    }
+                    else{
+                      text = "Something went wrong";
+                    }
+                    final snackBar1 = SnackBar(
+                      duration: Duration(seconds: 500),
+                      content: Text(text),
+                      action: SnackBarAction(
+                        label: 'Dismiss',
+                        onPressed: (){},
+                      ),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar1);
                   }
                 },
                 child: Text("Register"),
@@ -110,6 +142,18 @@ class _AuthenticationState extends State<Authentication> {
                           builder: (context) => MyStatefulWidget(),
                         ),
                       );
+                    }
+                    else{
+                      final text = "Invalid Email or Password";
+                      final snackBar = SnackBar(
+                          duration: Duration(seconds: 500),
+                          content: Text(text),
+                          action: SnackBarAction(
+                            label: 'Dismiss',
+                            onPressed: (){},
+                          ),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     }
                   },
                   child: Text("Login")),
