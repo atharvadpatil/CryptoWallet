@@ -1,4 +1,5 @@
 import 'package:cryptowallet/net/flutterfire.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'pages/authentication.dart';
 import 'pages/CoinList.dart';
@@ -42,7 +43,7 @@ class MyStatefulWidget extends StatefulWidget {
 
 
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
-  // int _selectedIndex = 0;
+  String currentUser = FirebaseAuth.instance.currentUser.email;
   static const TextStyle optionStyle =
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static List<Widget> _widgetOptions = <Widget>[
@@ -96,10 +97,16 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Icon(Icons.person),
-                    Text("welcome guest", style: TextStyle(color: Colors.white, fontSize: 18)),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("welcome ", style: TextStyle(color: Colors.white, fontSize: 22)),
+                        Text(currentUser, style: TextStyle(color: Colors.white, fontSize: 18, letterSpacing:1.5)),
+                      ],
+                    ),
                     CircleAvatar(
-                      child: Image.network('https://cdn3.iconfinder.com/data/icons/vector-icons-6/96/256-512.png'),
+                      child: Image.network('https://www.shareicon.net/data/512x512/2017/01/06/868320_people_512x512.png'),
                       radius: 40,
                     ),
                   ],
