@@ -117,7 +117,12 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                   title: Text("Logout"),
                   onTap: () async {
                     await signOut();
-                    Navigator.pushReplacementNamed(context, '/Authentication');
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => Authentication(),
+                      ), (route) => false,
+                    );
                   }),
             ],
           )),

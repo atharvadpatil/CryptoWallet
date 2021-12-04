@@ -107,7 +107,7 @@ class _AuthenticationState extends State<Authentication> {
                       text = "The account already exists for that email";
                     }
                     else{
-                      text = "Something went wrong";
+                      text = "Please Enter valid email";
                     }
                     final snackBar1 = SnackBar(
                       duration: Duration(seconds: 500),
